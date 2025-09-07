@@ -1,10 +1,19 @@
--- Non-correlated subquery: Find all properties with average rating > 4.0
+-- properties where the average rating is greater than 4.0
 SELECT *
-FROM Properties p
-WHERE p.property_id IN (
-    SELECT r.property_id
-    FROM Reviews r
-    GROUP BY r.property_id
-    HAVING AVG(r.rating) > 4.0
-)
-ORDER BY p.property_id;
+FROM Property
+WHERE property_id IN (
+    SELECT property_id
+    FROM Reviews
+    GROUP BY property_id
+    HAVING AVG(rating) > 4.0
+);
+
+
+--correlated subquery to find users who have made more than 3 bookings.
+SELECT u.*
+FROM User u
+WHERE (
+    SELECT COUNT(*)
+    FROM Bookings b
+    WHERE b.user_id = u.user_id
+) > 3;
